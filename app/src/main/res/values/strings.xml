@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LPC Timetable</string>
+    <string name="setting">Setting</string>
+    <string name="today">Today</string>
 </resources>

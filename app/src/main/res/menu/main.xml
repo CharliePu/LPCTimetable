@@ -4,12 +4,11 @@
     <item
         android:id="@+id/action_favorite"
         android:icon="@drawable/ic_event_white_24dp"
-        android:title="Favorite"
-        android:iconTint="@color/colorTitle"
+        android:title="@string/today"
         app:showAsAction="ifRoom"/>
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"
-        android:title="Setting"
+        android:title="@string/setting"
         app:showAsAction="never"/>
 </menu>
