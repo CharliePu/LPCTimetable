@@ -1,8 +1,6 @@
 package com.example.android.lpctimetable;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,11 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,11 +59,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_main);
-        setSupportActionBar(toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.tb_main));
 
         mIndicator = (TextView) findViewById(R.id.tv_indicator);
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_classes);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv_day);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -141,8 +134,7 @@ public class MainActivity extends AppCompatActivity {
         CalendarUtility.Response response = new CalendarUtility(this).listAllEvents();
         Integer day = response.mDay;
         Integer pm = response.mPm;
-
-        day = 0;
+        day = 1;
         if (day != null) {
             for (int i : TIME_TABLE[day]) {
                 subjectArrayList.add(mSubjects[i]);
@@ -158,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Out", i.mName);
         }
 
-        mAdapter = new MyAdapter(subjectArray);
+        mAdapter = new ClassesAdapter(subjectArray);
         mRecyclerView.setAdapter(mAdapter);
 
         return day != null;

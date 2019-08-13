@@ -16,7 +16,7 @@ import android.widget.TextView;
  * Created by charl on 1/19/2019.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ClassViewHolder>{
+public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassViewHolder>{
     private MainActivity.Subject[] mClasses;
     private static final String TIME_SLOTS[] = {
             "8:30 - 9:30",
@@ -112,14 +112,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ClassViewHolder>{
         }
     }
 
-    public MyAdapter(MainActivity.Subject[] classes) {
+    public ClassesAdapter(MainActivity.Subject[] classes) {
         mClasses = classes;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.ClassViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+    public ClassesAdapter.ClassViewHolder onCreateViewHolder(ViewGroup parent,
+                                                             int viewType) {
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.rv_elements, parent, false);
