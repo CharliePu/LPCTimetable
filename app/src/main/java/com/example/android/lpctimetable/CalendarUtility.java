@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
@@ -39,11 +40,6 @@ public class CalendarUtility{
     CalendarUtility(Context context){
         mCalendar = Calendar.getInstance();
         mContentResolver = context.getContentResolver();
-
-        mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-        mStartDate = mCalendar.getTimeInMillis();
-        mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), 23, 59, 59);
-        mEndDate = mCalendar.getTimeInMillis();
     }
 
     private ArrayList<String> queryEvents() throws SecurityException {
@@ -64,7 +60,17 @@ public class CalendarUtility{
         return events;
     }
 
-    public Response listAllEvents() {
+    public Response listAllEvents(int dayOffset) {
+        mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        //mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), 5, 22, 0, 0, 0);
+        mCalendar.add(Calendar.DATE,dayOffset);
+        mStartDate = mCalendar.getTimeInMillis();
+
+        mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+        //mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), 5, 22, 23, 59, 59);
+        mCalendar.add(Calendar.DATE,dayOffset);
+        mEndDate = mCalendar.getTimeInMillis();
+
         Integer day = null;
         Integer pm = null;
         try {
@@ -80,5 +86,11 @@ public class CalendarUtility{
             e.printStackTrace();
         }
         return new Response(day, pm);
+    }
+
+    public String getDateString(int dayOffset){
+        mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        mCalendar.add(Calendar.DATE, dayOffset);
+        return new SimpleDateFormat("MMM d").format(mCalendar.getTime());
     }
 }

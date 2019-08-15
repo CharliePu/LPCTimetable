@@ -10,14 +10,13 @@
         android:id="@+id/tb_main"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:elevation="4dp"
         android:background="@color/colorPrimary"
-        app:titleTextColor="@color/colorTitle"
-        android:theme="@style/AppTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="4dp"
+        android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_day"
@@ -30,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tb_main"
         tools:itemCount="2"
-        tools:listitem="@layout/activity_day_classes" />
+        tools:listitem="@layout/rv_elements" />
 
     <TextView
         android:id="@+id/tv_indicator"

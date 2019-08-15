@@ -2,10 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_event_white_24dp"
-        android:title="@string/today"
-        app:showAsAction="ifRoom"/>
+        android:id="@+id/action_previous_day"
+        android:icon="@drawable/ic_chevron_left_black_24dp"
+        android:title="@string/next_day"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_next_day"
+        android:icon="@drawable/ic_chevron_right_black_24dp"
+        android:title="@string/next_day"
+        app:showAsAction="ifRoom" />
+
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"

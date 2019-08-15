@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">LPC Timetable</string>
     <string name="setting">Setting</string>
-    <string name="today">Today</string>
+    <string name="next_day">Next Day</string>
+    <string name="previous_day">Previous Day</string>
+    <string name="loading">Loading</string>
 </resources>

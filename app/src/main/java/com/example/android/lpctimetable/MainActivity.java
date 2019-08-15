@@ -1,6 +1,7 @@
 package com.example.android.lpctimetable;
 
 import android.content.pm.PackageManager;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Subject mSubjects[] = {
+    private Subject[] mSubjects = {
             new Subject("Eng A L&L", "104", "ME"),
             new Subject("Math HL", "214", "MZ"),
             new Subject("Physics HL", "205", "MS"),
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             new Subject("Chin Li A SL", "212", "CC"),
             new Subject("Economics HL", "210", "AO")};
 
-    static private int TIME_TABLE[][] = {
+    static private int[][] TIME_TABLE = {
             {0, 1, 2, 3},//A
             {1, 2, 3, 4},//B
             {2, 3, 4, 5},//C
@@ -52,42 +53,38 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-
     private TextView mIndicator;
+
+    private ArrayList<Subject> mClassArrayList;
+    private int mDayOffset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setSupportActionBar((Toolbar) findViewById(R.id.tb_main));
 
+        setSupportActionBar((Toolbar) findViewById(R.id.tb_main));
+        getSupportActionBar().setTitle("Today");
+
+        mDayOffset = 0;
         mIndicator = (TextView) findViewById(R.id.tv_indicator);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_day);
+        mClassArrayList = new ArrayList<>();
+
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         checkPermissions();
 
-        mIndicator.setVisibility(View.VISIBLE);
-        mIndicator.setText("Loading");
-
-        if (loadClasses()) {
-            mIndicator.setVisibility(View.INVISIBLE);
-        } else {
-            mIndicator.setText("Class info not available\n Please check your calendar");
-        }
+        getClassesFromCalendar();
+        displayClasses();
     }
 
     @Override
     protected void onRestart() {
-        mIndicator.setVisibility(View.VISIBLE);
-        mIndicator.setText("Loading");
-
-        if (loadClasses()) {
-            mIndicator.setVisibility(View.INVISIBLE);
-        } else {
-            mIndicator.setText("Classes not available\n Please check your calendar");
-        }
+        mDayOffset = 0;
+        getClassesFromCalendar();
+        displayClasses();
 
         super.onRestart();
     }
@@ -103,14 +100,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.action_favorite:
+            case R.id.action_previous_day:
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                mDayOffset--;
+                getClassesFromCalendar();
+                displayClasses();
                 return true;
 
+            case R.id.action_next_day:
+                mDayOffset++;
+                getClassesFromCalendar();
+                displayClasses();
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -129,22 +133,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    boolean loadClasses(){
-        ArrayList<Subject> subjectArrayList = new ArrayList<>();
-        CalendarUtility.Response response = new CalendarUtility(this).listAllEvents();
+    void getClassesFromCalendar(){
+        mIndicator.setVisibility(View.VISIBLE);
+        mIndicator.setText(R.string.loading);
+
+        CalendarUtility.Response response = new CalendarUtility(this).listAllEvents(mDayOffset);
         Integer day = response.mDay;
         Integer pm = response.mPm;
-        day = 1;
+        mClassArrayList.clear();
         if (day != null) {
             for (int i : TIME_TABLE[day]) {
-                subjectArrayList.add(mSubjects[i]);
+                mClassArrayList.add(mSubjects[i]);
+            }
+            if (pm != null) {
+                mClassArrayList.add(mSubjects[pm]);
             }
         }
-        if (pm != null) {
-            subjectArrayList.add(mSubjects[pm]);
+    }
+
+    void displayClasses(){
+        switch (mDayOffset){
+            case 0:
+                getSupportActionBar().setTitle("Today");
+                break;
+            case 1:
+                getSupportActionBar().setTitle("Tomorrow");
+                break;
+            case -1:
+                getSupportActionBar().setTitle("Yesterday");
+                break;
+            default:
+                getSupportActionBar().setTitle(new CalendarUtility(this).getDateString(mDayOffset));
         }
 
-        Subject subjectArray[] = subjectArrayList.toArray(new Subject[subjectArrayList.size()]);
+        if (mClassArrayList.isEmpty()) {
+            mIndicator.setText("Class info not available\n Please check your calendar");
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            return;
+        }
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mIndicator.setVisibility(View.INVISIBLE);
+
+        Subject[] subjectArray = mClassArrayList.toArray(new Subject[0]);
 
         for (Subject i : subjectArray){
             Log.i("Out", i.mName);
@@ -152,7 +182,5 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter = new ClassesAdapter(subjectArray);
         mRecyclerView.setAdapter(mAdapter);
-
-        return day != null;
     }
 }
