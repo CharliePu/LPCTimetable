@@ -1,5 +1,6 @@
 package com.example.android.lpctimetable;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,14 +34,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Subject[] mSubjects = {
-            new Subject("Eng A L&L", "104", "ME"),
-            new Subject("Math HL", "214", "MZ"),
+    private Subject[] mSubjectList = {
+            new Subject("Eng A L&L", "316", "ME"),
+            new Subject("Math HL", "215", "MZ"),
             new Subject("Physics HL", "205", "MS"),
-            new Subject("TOK", "212", "KB"),
+            new Subject("Economics HL", "211", "AO"),
             new Subject("Env Sys Soc SL", "207", "JAC"),
             new Subject("Chin Li A SL", "212", "CC"),
-            new Subject("Economics HL", "210", "AO")};
+            new Subject("TOK", "212", "KB"),
+    };
+
+    private ArrayList<Subject> mSubjects;
 
     static private int[][] TIME_TABLE = {
             {0, 1, 2, 3},//A
@@ -57,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Subject> mClassArrayList;
     private int mDayOffset;
+    private @Nullable String mDayOther;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
+                Intent intent = new Intent(this, SettingActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.action_previous_day:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
                 mDayOffset--;
                 getClassesFromCalendar();
                 displayClasses();
@@ -115,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 getClassesFromCalendar();
                 displayClasses();
                 return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -134,19 +143,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void getClassesFromCalendar(){
+        mSubjects = new ArrayList<>(Arrays.asList(mSubjectList));
+
         mIndicator.setVisibility(View.VISIBLE);
         mIndicator.setText(R.string.loading);
 
         CalendarUtility.Response response = new CalendarUtility(this).listAllEvents(mDayOffset);
-        Integer day = response.mDay;
-        Integer pm = response.mPm;
+        mDayOther = response.mOther;
         mClassArrayList.clear();
-        if (day != null) {
-            for (int i : TIME_TABLE[day]) {
-                mClassArrayList.add(mSubjects[i]);
+        if (response.mDay != null) {
+            for (int i : TIME_TABLE[response.mDay]) {
+                mClassArrayList.add(mSubjects.get(i));
             }
-            if (pm != null) {
-                mClassArrayList.add(mSubjects[pm]);
+            if (response.mPm != null) {
+                mClassArrayList.add(mSubjects.get(response.mPm));
             }
         }
     }
@@ -167,7 +177,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (mClassArrayList.isEmpty()) {
-            mIndicator.setText("Class info not available\n Please check your calendar");
+            if (mDayOther != null)
+            {
+                mIndicator.setText("Classes not available\n" + mDayOther);
+            } else {
+                mIndicator.setText("Classes not available\n Please check your calendar");
+            }
             mRecyclerView.setVisibility(View.INVISIBLE);
             return;
         }

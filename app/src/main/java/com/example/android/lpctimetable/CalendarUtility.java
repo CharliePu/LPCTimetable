@@ -14,7 +14,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import static android.content.ContentValues.TAG;
+
 
 /**
  * Created by charl on 1/27/2019.
@@ -27,13 +27,21 @@ public class CalendarUtility{
     private long mStartDate, mEndDate;
 
     private static final String[] EVENT_PROJECTION = new String[] { CalendarContract.Events.TITLE, CalendarContract.Events.DTSTART };
+    private static final String TAG = "CalendarUtility";
 
     public class Response {
         @Nullable public Integer mDay;
         @Nullable public Integer mPm;
-        Response(@Nullable Integer day, @Nullable Integer pm) {
+        @Nullable public String mOther;
+        Response(@Nullable Integer day, @Nullable Integer pm, @Nullable String other) {
             mDay = day;
             mPm = pm;
+            mOther = other;
+        }
+        Response(){
+            mDay = null;
+            mPm = null;
+            mOther = null;
         }
     }
 
@@ -42,50 +50,66 @@ public class CalendarUtility{
         mContentResolver = context.getContentResolver();
     }
 
-    private ArrayList<String> queryEvents() throws SecurityException {
-        String selection = "" + CalendarContract.Events.DTSTART + " > ? AND ("
-                + CalendarContract.Events.DTSTART + " < ?) AND ("
-                + CalendarContract.Events.TITLE + " LIKE ?)";
-        String selectionArgs[] = { Long.toString(mStartDate), Long.toString(mEndDate), "Day%"};
-
-        Cursor cursor = mContentResolver.query(CalendarContract.Events.CONTENT_URI, EVENT_PROJECTION, selection, selectionArgs, null);
-
-        Log.i(TAG, "queryEvents: counts: "+cursor.getCount());
-        ArrayList<String> events = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            events.add(cursor.getString(0));
-            Log.i(TAG, "queryEvents: "+cursor.getString(0)+ " "+cursor.getString(1));
-        }
-        Log.i(TAG, "queryEvents: date: "+Long.toString(mStartDate));
-        return events;
-    }
-
     public Response listAllEvents(int dayOffset) {
+        //Setup query time
         mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-        //mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), 5, 22, 0, 0, 0);
         mCalendar.add(Calendar.DATE,dayOffset);
         mStartDate = mCalendar.getTimeInMillis();
-
         mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), 23, 59, 59);
-        //mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), 5, 22, 23, 59, 59);
         mCalendar.add(Calendar.DATE,dayOffset);
         mEndDate = mCalendar.getTimeInMillis();
 
-        Integer day = null;
-        Integer pm = null;
+        //Setup query time interval
+        String selection = "" + CalendarContract.Events.DTSTART + " > ? AND ("
+                + CalendarContract.Events.DTSTART + " < ?) AND ("
+                + CalendarContract.Events.TITLE + " LIKE ?) AND (" + CalendarContract.Events.ALL_DAY +"= 1)";
+
+        //Query any calendar event containing "day"
+        String selectionArgs[] = { Long.toString(mStartDate), Long.toString(mEndDate), "%day _%"};
+        Cursor cursor = null;
         try {
-            String event = queryEvents().get(0);
-            day = (int)event.charAt(4) - 65;
-            if (day < 0 || day > 6) {
-                day = null;
-            }
-            if (event.length() > 5){
-                pm = (int)event.charAt(11) - 65;
-            }
-        } catch(Exception e) {
+            cursor = mContentResolver.query(CalendarContract.Events.CONTENT_URI, EVENT_PROJECTION, selection, selectionArgs, null);
+        } catch(SecurityException e){
             e.printStackTrace();
         }
-        return new Response(day, pm);
+
+        String event = null;
+        String dayLetter = null;
+
+        Integer day = null;
+        Integer pm = null;
+        String other = null;
+
+        //Extract the string from the query cursor
+        if (cursor != null && cursor.moveToFirst()) {
+            //Get the first string from the cursor
+            event = cursor.getString(0);
+            //Cut the string before "day", extract the first letter and convert it to an index
+            dayLetter = event.toLowerCase().split("(?<=day) ")[1];
+            day = (int)dayLetter.charAt(0) - 97;
+            Log.i(TAG, "listAllEvents: Day Letter " + dayLetter);
+        }else {
+            Log.e(TAG, "listAllEvents: failed to grab event");
+        }
+
+        if (event != null){
+            //Treat event that does not meet the condition as "other"
+            if ((dayLetter.length() != 1 && dayLetter.length() != 8) && (
+                    dayLetter.length() > 8 || day < 0 || day > 7)){
+                day = null;
+                pm = null;
+                other = event;
+            }else {
+                //Store pm block value if available
+                if (dayLetter.length() == 8) {
+                    Log.i(TAG, "listAllEvents: PM Block " + dayLetter.charAt(7));
+                    pm = (int) dayLetter.charAt(7) - 97;
+                }
+            }
+        }
+        Log.d(TAG, "listAllEvents: ("+day+", "+pm+", "+other+")");
+
+        return new Response(day, pm, other);
     }
 
     public String getDateString(int dayOffset){
