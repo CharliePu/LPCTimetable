@@ -10,11 +10,11 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_setting"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/colorTitle"
         android:background="@color/colorPrimary"
         android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@color/colorTitle" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <ScrollView
         android:layout_width="match_parent"

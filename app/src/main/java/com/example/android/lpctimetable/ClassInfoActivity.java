@@ -20,6 +20,8 @@ public class ClassInfoActivity extends AppCompatActivity {
         mRoom.setText(getIntent().getStringExtra(ClassesAdapter.CLASS_ROOM));
         mTeacher = (TextView)findViewById(R.id.teacher);
         mTeacher.setText(getIntent().getStringExtra(ClassesAdapter.CLASS_TEACHER));
+
+        getSupportActionBar().setTitle(getIntent().getStringExtra(ClassesAdapter.CLASS_NAME));
     }
 
     @Override

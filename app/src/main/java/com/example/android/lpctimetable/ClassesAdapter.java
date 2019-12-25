@@ -29,6 +29,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
     private RecyclerView mParent;
     public static final String CLASS_ROOM = "com.example.android.lpctimetable.ClassRoom";
     public static final String CLASS_TEACHER = "com.example.android.lpctimetable.ClassTeacher";
+    public static final String CLASS_NAME = "com.example.android.lpctimetable.Class";
 
     class myOnClickListener implements View.OnClickListener {
         @Override
@@ -37,6 +38,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
             int pos = mParent.getChildLayoutPosition(view);
             intent.putExtra(CLASS_ROOM, mClasses[pos].mRoom);
             intent.putExtra(CLASS_TEACHER, mClasses[pos].mTeacher);
+            intent.putExtra(CLASS_NAME, mClasses[pos].mName);
             mParent.getContext().startActivity(intent);
         }
     }

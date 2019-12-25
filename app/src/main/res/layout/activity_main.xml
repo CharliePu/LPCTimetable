@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fitsSystemWindows="true">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_main"
@@ -13,9 +12,9 @@
         android:layout_height="56dp"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
-        android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_day"
