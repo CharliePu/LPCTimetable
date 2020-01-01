@@ -2,6 +2,7 @@ package com.example.android.lpctimetable;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,26 +24,14 @@ import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
 
-    public class Subject {
-        public String mName;
-        public String mRoom;
-        public String mTeacher;
-
-        Subject(String name, String room, String teacher) {
-            mName = name;
-            mRoom = room;
-            mTeacher = teacher;
-        }
-    }
-
     private Subject[] mSubjectList = {
-            new Subject("Eng A L&L", "316", "ME"),
-            new Subject("Math HL", "215", "MZ"),
-            new Subject("Physics HL", "205", "MS"),
-            new Subject("Economics HL", "211", "AO"),
-            new Subject("Env Sys Soc SL", "207", "JAC"),
-            new Subject("Chin Li A SL", "212", "CC"),
-            new Subject("TOK", "212", "KB"),
+            new Subject("Eng A L&L", "316", "ME",R.drawable.english),
+            new Subject("Math HL", "215", "MZ", R.drawable.maths),
+            new Subject("Physics HL", "205", "MS", R.drawable.physics),
+            new Subject("Economics HL", "211", "AO", R.drawable.economics),
+            new Subject("Env Sys Soc SL", "207", "JAC", R.drawable.ess),
+            new Subject("Chin Li A SL", "212", "CC", R.drawable.chinese),
+            new Subject("TOK", "212", "KB", R.drawable.tok),
     };
 
     private ArrayList<Subject> mSubjects;
@@ -151,10 +141,10 @@ public class MainActivity extends AppCompatActivity {
         CalendarUtility.Response response = new CalendarUtility(this).listAllEvents(mDayOffset);
         mDayOther = response.mOther;
         mClassArrayList.clear();
-
-        ////////////DEBUG
-        response.mDay=1;
-        ///////////
+//
+//        ////////////DEBUG
+//        response.mDay=1;
+//        ///////////
         if (response.mDay != null) {
             for (int i : TIME_TABLE[response.mDay]) {
                 mClassArrayList.add(mSubjects.get(i));
@@ -185,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 mIndicator.setText("Classes not available\n" + mDayOther);
             } else {
-                mIndicator.setText("Classes not available\n Please check your calendar");
+                mIndicator.setText("Classes not available\n Go check your timetable");
             }
             mRecyclerView.setVisibility(View.INVISIBLE);
             return;

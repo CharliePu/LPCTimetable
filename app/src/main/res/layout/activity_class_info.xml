@@ -17,9 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@id/tb_info">
 
             <ImageView
+                android:id="@+id/iv_cover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -51,45 +53,45 @@
             android:padding="@dimen/text_margin">
 
             <TextView
-                android:id="@+id/teacher_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Teacher"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
             <TextView
-                android:id="@+id/teacher"
+                android:id="@+id/tv_teacher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:text="Marit Zahkna"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <TextView
-                android:id="@+id/room_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="Room"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
             <TextView
-                android:id="@+id/room"
+                android:id="@+id/tv_room"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/large_text"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:src="@android:drawable/ic_dialog_email"
         app:layout_anchor="@id/ab_info"
         app:layout_anchorGravity="bottom|right|end" />
 

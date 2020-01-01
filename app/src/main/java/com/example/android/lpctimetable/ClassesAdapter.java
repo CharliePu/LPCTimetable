@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import android.widget.TextView;
  */
 
 public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassViewHolder>{
-    private MainActivity.Subject[] mClasses;
+    private Subject[] mClasses;
     private static final String TIME_SLOTS[] = {
             "8:30 - 9:30",
             "10:00 - 11:10",
@@ -27,18 +28,14 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
     };
 
     private RecyclerView mParent;
-    public static final String CLASS_ROOM = "com.example.android.lpctimetable.ClassRoom";
-    public static final String CLASS_TEACHER = "com.example.android.lpctimetable.ClassTeacher";
-    public static final String CLASS_NAME = "com.example.android.lpctimetable.Class";
+    public static final String CLASS_CURRENT = "com.example.android.lpctimetable.ClassCurrent";
 
     class myOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(mParent.getContext(), ClassInfoActivity.class);
             int pos = mParent.getChildLayoutPosition(view);
-            intent.putExtra(CLASS_ROOM, mClasses[pos].mRoom);
-            intent.putExtra(CLASS_TEACHER, mClasses[pos].mTeacher);
-            intent.putExtra(CLASS_NAME, mClasses[pos].mName);
+            intent.putExtra(CLASS_CURRENT, mClasses[pos]);
             mParent.getContext().startActivity(intent);
         }
     }
@@ -114,7 +111,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
         }
     }
 
-    public ClassesAdapter(MainActivity.Subject[] classes) {
+    public ClassesAdapter(Subject[] classes) {
         mClasses = classes;
     }
 

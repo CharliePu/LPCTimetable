@@ -4,24 +4,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ClassInfoActivity extends AppCompatActivity {
     private TextView mRoom;
     private TextView mTeacher;
+    private ImageView mCover;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_info);
+        mRoom = (TextView)findViewById(R.id.tv_room);
+        mTeacher = (TextView)findViewById(R.id.tv_teacher);
+        mCover = (ImageView) findViewById(R.id.iv_cover);
         setSupportActionBar((Toolbar)findViewById(R.id.tb_info));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mRoom = (TextView)findViewById(R.id.room);
-        //mRoom.setText(getIntent().getStringExtra(ClassesAdapter.CLASS_ROOM));
-        mTeacher = (TextView)findViewById(R.id.teacher);
-        mTeacher.setText(getIntent().getStringExtra(ClassesAdapter.CLASS_TEACHER));
-//
-//        getSupportActionBar().setTitle(getIntent().getStringExtra(ClassesAdapter.CLASS_NAME));
+        Subject mClassCurrent = (Subject) getIntent().getSerializableExtra(ClassesAdapter.CLASS_CURRENT);
+
+        mRoom.setText(mClassCurrent.mRoom);
+        mTeacher.setText(mClassCurrent.mTeacher);
+        getSupportActionBar().setTitle(mClassCurrent.mName);
+        mCover.setImageResource(mClassCurrent.mCoverId);
+
 //        if (ClassesAdapter.CLASS_NAME.contains("Eng"))
 //        {
 //            mBackground.setImageResource(R.drawable.english);
