@@ -17,11 +17,39 @@ public class ClassInfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRoom = (TextView)findViewById(R.id.room);
-        mRoom.setText(getIntent().getStringExtra(ClassesAdapter.CLASS_ROOM));
+        //mRoom.setText(getIntent().getStringExtra(ClassesAdapter.CLASS_ROOM));
         mTeacher = (TextView)findViewById(R.id.teacher);
         mTeacher.setText(getIntent().getStringExtra(ClassesAdapter.CLASS_TEACHER));
-
-        getSupportActionBar().setTitle(getIntent().getStringExtra(ClassesAdapter.CLASS_NAME));
+//
+//        getSupportActionBar().setTitle(getIntent().getStringExtra(ClassesAdapter.CLASS_NAME));
+//        if (ClassesAdapter.CLASS_NAME.contains("Eng"))
+//        {
+//            mBackground.setImageResource(R.drawable.english);
+//        }
+//        if (ClassesAdapter.CLASS_NAME.contains("Chin"))
+//        {
+//            mBackground.setImageResource(R.drawable.chinese);
+//        }
+//        if (ClassesAdapter.CLASS_NAME.contains("Math"))
+//        {
+//            mBackground.setImageResource(R.drawable.maths);
+//        }
+//        if (ClassesAdapter.CLASS_NAME.contains("Env Sys Soc"))
+//        {
+//            mBackground.setImageResource(R.drawable.ess);
+//        }
+//        if (ClassesAdapter.CLASS_NAME.contains("Physics"))
+//        {
+//            mBackground.setImageResource(R.drawable.physics);
+//        }
+//        if (ClassesAdapter.CLASS_NAME.contains("Economics"))
+//        {
+//            mBackground.setImageResource(R.drawable.economics);
+//        }
+//        if (ClassesAdapter.CLASS_NAME.contains("TOK"))
+//        {
+//            mBackground.setImageResource(R.drawable.tok);
+//        }
     }
 
     @Override

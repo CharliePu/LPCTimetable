@@ -151,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
         CalendarUtility.Response response = new CalendarUtility(this).listAllEvents(mDayOffset);
         mDayOther = response.mOther;
         mClassArrayList.clear();
+
+        ////////////DEBUG
+        response.mDay=1;
+        ///////////
         if (response.mDay != null) {
             for (int i : TIME_TABLE[response.mDay]) {
                 mClassArrayList.add(mSubjects.get(i));
