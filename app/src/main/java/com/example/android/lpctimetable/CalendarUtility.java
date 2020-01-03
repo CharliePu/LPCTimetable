@@ -13,7 +13,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Locale;
 
 
 /**
@@ -88,6 +88,7 @@ public class CalendarUtility{
             dayLetter = event.toLowerCase().split("(?<=day) ")[1];
             day = (int)dayLetter.charAt(0) - 97;
             Log.i(TAG, "listAllEvents: Day Letter " + dayLetter);
+            cursor.close();
         }else {
             Log.e(TAG, "listAllEvents: failed to grab event");
         }
@@ -115,6 +116,6 @@ public class CalendarUtility{
     public String getDateString(int dayOffset){
         mCalendar.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
         mCalendar.add(Calendar.DATE, dayOffset);
-        return new SimpleDateFormat("MMM d").format(mCalendar.getTime());
+        return new SimpleDateFormat("MMM d", Locale.US).format(mCalendar.getTime());
     }
 }

@@ -142,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
         mDayOther = response.mOther;
         mClassArrayList.clear();
 
-        ////////////DEBUG
-        //response.mDay=1;
-        ///////////
+        //////////DEBUG
+        response.mDay=1;
+        /////////
         if (response.mDay != null) {
             for (int i : TIME_TABLE[response.mDay]) {
                 mClassArrayList.add(mSubjects.get(i));
