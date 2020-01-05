@@ -1,5 +1,6 @@
 package com.example.android.lpctimetable;
 
+import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ public class ClassInfoActivity extends AppCompatActivity {
     private EditText mRoomEdit;
     private EditText mTeacherEdit;
     private AppBarLayout mLayout;
+    private int currentMenu = R.menu.class_info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,7 @@ public class ClassInfoActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.class_info, menu);
+        getMenuInflater().inflate(currentMenu, menu);
         return true;
     }
 
@@ -57,51 +60,68 @@ public class ClassInfoActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_edit:
-                mRoom.setVisibility(View.INVISIBLE);
-                mTeacher.setVisibility(View.INVISIBLE);
-                mRoomEdit.setVisibility(View.VISIBLE);
-                mTeacherEdit.setVisibility(View.VISIBLE);
-                mLayout.setExpanded(false,true);
-                this.startActionMode(actionModeCallback);
+                openEditingInterface();
+                return true;
+            case R.id.action_edit_done:
+                closeEditingInterface();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
-
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.class_info_edit, menu);
-            return true;
+    @Override
+    public void onBackPressed() {
+        if (currentMenu == R.menu.class_info_edit)
+        {
+            closeEditingInterface();
         }
-
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
+        else
+        {
+            super.onBackPressed();
         }
+    }
 
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_edit_done:
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                default:
-                    return false;
-            }
+    private void closeEditingInterface()
+    {
+        hideKeyboard(this);
+
+        mRoom.setText(mRoomEdit.getText());
+        mTeacher.setText(mTeacherEdit.getText());
+
+        mRoom.setVisibility(View.VISIBLE);
+        mTeacher.setVisibility(View.VISIBLE);
+        mRoomEdit.setVisibility(View.INVISIBLE);
+        mTeacherEdit.setVisibility(View.INVISIBLE);
+
+        mLayout.setExpanded(true,true);
+        currentMenu = R.menu.class_info;
+        invalidateOptionsMenu();
+    }
+
+    private void openEditingInterface()
+    {
+        mRoomEdit.setText(mRoom.getText());
+        mTeacherEdit.setText(mTeacher.getText());
+
+        mRoom.setVisibility(View.INVISIBLE);
+        mTeacher.setVisibility(View.INVISIBLE);
+        mRoomEdit.setVisibility(View.VISIBLE);
+        mTeacherEdit.setVisibility(View.VISIBLE);
+
+        mLayout.setExpanded(false,true);
+        currentMenu = R.menu.class_info_edit;
+        invalidateOptionsMenu();
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
         }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-
-        }
-    };
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 }
