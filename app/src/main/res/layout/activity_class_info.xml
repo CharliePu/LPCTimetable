@@ -5,19 +5,17 @@
     tools:context="com.example.android.lpctimetable.ClassInfoActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
->
+    android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/ab_info"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
-        android:fitsSystemWindows="false">
+        android:layout_height="@dimen/app_bar_height">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
             app:contentScrim="@color/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@id/tb_info">
@@ -36,7 +34,6 @@
                 android:id="@+id/tb_info"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_marginTop="25dp"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:titleTextColor="@color/colorTitle" />
