@@ -7,11 +7,13 @@ public class Subject implements Serializable {
     public String mRoom;
     public String mTeacher;
     public int mCoverId;
+    public char mClassCode;
 
-    Subject(String name, String room, String teacher, int coverId) {
+    Subject(String name, String room, String teacher, int coverId, char classCode) {
         mName = name;
         mRoom = room;
         mTeacher = teacher;
         mCoverId = coverId;
+        mClassCode = classCode;
     }
 }

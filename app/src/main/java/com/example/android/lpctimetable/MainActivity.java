@@ -25,13 +25,13 @@ import javax.annotation.Nullable;
 public class MainActivity extends AppCompatActivity {
 
     private Subject[] mSubjectList = {
-            new Subject("Eng A L&L", "316", "ME",R.drawable.english),
-            new Subject("Math HL", "215", "MZ", R.drawable.maths),
-            new Subject("Physics HL", "205", "MS", R.drawable.physics),
-            new Subject("Economics HL", "211", "AO", R.drawable.economics),
-            new Subject("Env Sys Soc SL", "207", "JAC", R.drawable.ess),
-            new Subject("Chin Li A SL", "212", "CC", R.drawable.chinese),
-            new Subject("TOK", "212", "KB", R.drawable.tok),
+            new Subject("Eng A L&L", "316", "ME",R.drawable.english, 'A'),
+            new Subject("Math HL", "215", "MZ", R.drawable.maths, 'B'),
+            new Subject("Physics HL", "205", "MS", R.drawable.physics, 'C'),
+            new Subject("Economics HL", "211", "AO", R.drawable.economics, 'G'),
+            new Subject("Env Sys Soc SL", "207", "JAC", R.drawable.ess, 'E'),
+            new Subject("Chin Li A SL", "212", "CC", R.drawable.chinese, 'F'),
+            new Subject("TOK", "212", "KB", R.drawable.tok, 'D'),
     };
 
     private ArrayList<Subject> mSubjects;
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         mClassArrayList.clear();
 
         //////////DEBUG
-        response.mDay=1;
+        //response.mDay=1;
         /////////
         if (response.mDay != null) {
             for (int i : TIME_TABLE[response.mDay]) {

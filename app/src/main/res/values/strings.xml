@@ -12,6 +12,7 @@
     <string name="class_f">Class F</string>
     <string name="class_info_edit">Edit</string>
     <string name="class_info_done">Done</string>
+    <string name="class_info_subject">Subject</string>
     <string name="subject_cover_image">Subject Cover</string>
     <string name="class_info_teacher">Teacher</string>
     <string name="class_info_room">Room</string>
