@@ -31,9 +31,9 @@ public class CalendarUtility{
 
     public class Response {
         @Nullable public Integer mDay;
-        @Nullable public Integer mPm;
+        @Nullable public Character mPm;
         @Nullable public String mOther;
-        Response(@Nullable Integer day, @Nullable Integer pm, @Nullable String other) {
+        Response(@Nullable Integer day, @Nullable Character pm, @Nullable String other) {
             mDay = day;
             mPm = pm;
             mOther = other;
@@ -77,7 +77,7 @@ public class CalendarUtility{
         String dayLetter = null;
 
         Integer day = null;
-        Integer pm = null;
+        Character pm = null;
         String other = null;
 
         //Extract the string from the query cursor
@@ -104,7 +104,7 @@ public class CalendarUtility{
                 //Store pm block value if available
                 if (dayLetter.length() == 8) {
                     Log.i(TAG, "listAllEvents: PM Block " + dayLetter.charAt(7));
-                    pm = (int) dayLetter.charAt(7) - 97;
+                    pm = dayLetter.charAt(7);
                 }
             }
         }

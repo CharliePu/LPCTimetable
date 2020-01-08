@@ -27,6 +27,7 @@ public class ClassInfoActivity extends AppCompatActivity {
     private AppBarLayout mAppBarLayout;
     private ConstraintLayout mConstraintLayout;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private Subject mClassCurrent;
 
     private int currentMenu = R.menu.class_info;
     private char classCode;
@@ -51,7 +52,7 @@ public class ClassInfoActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
-        Subject mClassCurrent = (Subject) getIntent().getSerializableExtra(ClassesAdapter.CLASS_CURRENT);
+        mClassCurrent = (Subject) getIntent().getSerializableExtra(ClassesAdapter.CLASS_CURRENT);
 
         mRoom.setText(mClassCurrent.mRoom);
         mTeacher.setText(mClassCurrent.mTeacher);
@@ -76,7 +77,7 @@ public class ClassInfoActivity extends AppCompatActivity {
                 openEditingInterface();
                 return true;
             case R.id.action_edit_done:
-                closeEditingInterface();
+                closeEditingInterface(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -87,7 +88,7 @@ public class ClassInfoActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (currentMenu == R.menu.class_info_edit)
         {
-            closeEditingInterface();
+            closeEditingInterface(false);
         }
         else
         {
@@ -95,22 +96,30 @@ public class ClassInfoActivity extends AppCompatActivity {
         }
     }
 
-    private void closeEditingInterface()
+    private void closeEditingInterface(Boolean willSave)
     {
         hideKeyboard(this);
 
-        mRoom.setText(mRoomEdit.getText());
-        mTeacher.setText(mTeacherEdit.getText());
 
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(mConstraintLayout);
         constraintSet.connect(R.id.tv_teacher_label, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
         constraintSet.applyTo(mConstraintLayout);
 
-        mSubject.setVisibility(View.INVISIBLE);
-        mCollapsingToolbarLayout.setTitle(mSubjectEdit.getText());
-        mSubjectEdit.setVisibility(View.INVISIBLE);
+        if (willSave)
+        {
+            mCollapsingToolbarLayout.setTitle(mSubjectEdit.getText().toString());
+            mRoom.setText(mRoomEdit.getText().toString());
+            mTeacher.setText(mTeacherEdit.getText().toString());
 
+            mClassCurrent.mRoom = mRoomEdit.getText().toString();
+            mClassCurrent.mTeacher = mTeacherEdit.getText().toString();
+            mClassCurrent.mName = mSubjectEdit.getText().toString();
+            mClassCurrent.save(this);
+        }
+
+        mSubject.setVisibility(View.INVISIBLE);
+        mSubjectEdit.setVisibility(View.INVISIBLE);
         mRoom.setVisibility(View.VISIBLE);
         mTeacher.setVisibility(View.VISIBLE);
         mRoomEdit.setVisibility(View.INVISIBLE);
@@ -134,7 +143,7 @@ public class ClassInfoActivity extends AppCompatActivity {
         mSubject.setVisibility(View.VISIBLE);
         mSubjectEdit.setText(mCollapsingToolbarLayout.getTitle());
         mSubjectEdit.setVisibility(View.VISIBLE);
-        mCollapsingToolbarLayout.setTitle("Editing class "+classCode);
+        mCollapsingToolbarLayout.setTitle("Class "+classCode);
         
         mRoom.setVisibility(View.INVISIBLE);
         mTeacher.setVisibility(View.INVISIBLE);

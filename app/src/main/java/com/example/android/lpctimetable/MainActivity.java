@@ -1,6 +1,7 @@
 package com.example.android.lpctimetable;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
@@ -25,25 +26,25 @@ import javax.annotation.Nullable;
 public class MainActivity extends AppCompatActivity {
 
     private Subject[] mSubjectList = {
-            new Subject("Eng A L&L", "316", "ME",R.drawable.english, 'A'),
-            new Subject("Math HL", "215", "MZ", R.drawable.maths, 'B'),
-            new Subject("Physics HL", "205", "MS", R.drawable.physics, 'C'),
-            new Subject("Economics HL", "211", "AO", R.drawable.economics, 'G'),
-            new Subject("Env Sys Soc SL", "207", "JAC", R.drawable.ess, 'E'),
-            new Subject("Chin Li A SL", "212", "CC", R.drawable.chinese, 'F'),
-            new Subject("TOK", "212", "KB", R.drawable.tok, 'D'),
+            new Subject("Eng A L&L", "316", "ME",R.drawable.english, 'A'),//0
+            new Subject("Math HL", "215", "MZ", R.drawable.maths, 'B'),//1
+            new Subject("Physics HL", "205", "MS", R.drawable.physics, 'C'),//2
+            new Subject("TOK", "212", "KB", R.drawable.tok, 'D'),//3
+            new Subject("Env Sys Soc SL", "207", "JAC", R.drawable.ess, 'E'),//4
+            new Subject("Chin Li A SL", "212", "CC", R.drawable.chinese, 'F'),//5
+            new Subject("Economics HL", "211", "AO", R.drawable.economics, 'G'),//6
     };
 
     private ArrayList<Subject> mSubjects;
 
-    static private int[][] TIME_TABLE = {
-            {0, 1, 2, 3},//A
-            {1, 2, 3, 4},//B
-            {2, 3, 4, 5},//C
-            {3, 4, 5, 6},//D
-            {4, 5, 6, 0},//E
-            {5, 6, 0, 1},//F
-            {6, 0, 1, 2}//G
+    static private char[][] TIME_TABLE = {
+            {'A', 'B', 'C', 'D'},//A
+            {'B', 'C', 'D', 'E'},//B
+            {'C', 'D', 'E', 'F'},//C
+            {'D', 'E', 'F', 'G'},//D
+            {'E', 'F', 'G', 'A'},//E
+            {'F', 'G', 'A', 'B'},//F
+            {'G', 'A', 'B', 'C'}//G
     };
 
     static int REQUEST_CALENDAR_READ = 233;
@@ -142,15 +143,15 @@ public class MainActivity extends AppCompatActivity {
         mDayOther = response.mOther;
         mClassArrayList.clear();
 
-        //////////DEBUG
-        //response.mDay=1;
-        /////////
+        ////////DEBUG
+        response.mDay=1;
+        ///////
         if (response.mDay != null) {
-            for (int i : TIME_TABLE[response.mDay]) {
-                mClassArrayList.add(mSubjects.get(i));
+            for (char i : TIME_TABLE[response.mDay]) {
+                mClassArrayList.add(new Subject(this,i));
             }
             if (response.mPm != null) {
-                mClassArrayList.add(mSubjects.get(response.mPm));
+                mClassArrayList.add(new Subject(this,response.mPm));
             }
         }
     }
