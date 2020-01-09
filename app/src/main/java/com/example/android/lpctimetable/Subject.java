@@ -9,14 +9,16 @@ public class Subject implements Serializable {
     public String mName;
     public String mRoom;
     public String mTeacher;
+    public String mEmail;
     public int mCoverId;
     public char mClassCode;
 
-    Subject(String name, String room, String teacher, int coverId, char classCode) {
+    Subject(String name, String room, String teacher, int coverId, String email, char classCode) {
         mName = name;
         mRoom = room;
         mTeacher = teacher;
         mCoverId = coverId;
+        mEmail = email;
         mClassCode = classCode;
     }
 
@@ -25,6 +27,7 @@ public class Subject implements Serializable {
         mName = sharedPref.getString("com.example.android.lpctimetable.class_"+classCode+"_name", "Class "+classCode);
         mRoom = sharedPref.getString("com.example.android.lpctimetable.class_"+classCode+"_room", "");
         mTeacher = sharedPref.getString("com.example.android.lpctimetable.class_"+classCode+"_teacher", "");
+        mEmail = sharedPref.getString("com.example.android.lpctimetable.class_"+classCode+"_email", "");
         mCoverId = sharedPref.getInt("com.example.android.lpctimetable.class_"+classCode+"_cover", R.drawable.ess);
         mClassCode = classCode;
     }
@@ -35,6 +38,7 @@ public class Subject implements Serializable {
         editor.putString("com.example.android.lpctimetable.class_"+mClassCode+"_name",mName);
         editor.putString("com.example.android.lpctimetable.class_"+mClassCode+"_room",mRoom);
         editor.putString("com.example.android.lpctimetable.class_"+mClassCode+"_teacher",mTeacher);
+        editor.putString("com.example.android.lpctimetable.class_"+mClassCode+"_email",mEmail);
         editor.putInt("com.example.android.lpctimetable.class_"+mClassCode+"_cover",mCoverId);
         editor.apply();
     }

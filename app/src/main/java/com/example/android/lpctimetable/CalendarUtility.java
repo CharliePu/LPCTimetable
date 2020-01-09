@@ -103,8 +103,8 @@ public class CalendarUtility{
             }else {
                 //Store pm block value if available
                 if (dayLetter.length() == 8) {
-                    Log.i(TAG, "listAllEvents: PM Block " + dayLetter.charAt(7));
-                    pm = dayLetter.charAt(7);
+                    Log.i(TAG, "listAllEvents: PM Block " + dayLetter.toUpperCase().charAt(7));
+                    pm = dayLetter.toUpperCase().charAt(7);
                 }
             }
         }

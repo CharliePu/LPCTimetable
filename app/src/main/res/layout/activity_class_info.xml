@@ -57,10 +57,9 @@
 
             <TextView
                 android:id="@+id/tv_subject_label"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/class_info_subject"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
@@ -88,7 +87,7 @@
 
             <TextView
                 android:id="@+id/tv_teacher_label"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -107,6 +106,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_teacher_label"
@@ -162,21 +162,50 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:ems="10"
+                android:importantForAutofill="no"
                 android:inputType="none"
                 android:singleLine="true"
-                android:text="@string/class_info_room"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_room_label"
-                android:importantForAutofill="no" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_room_label" />
+
+            <TextView
+                android:id="@+id/tv_email_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/class_info_email"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_room" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_email_label" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_mail"
+        android:id="@+id/fab_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

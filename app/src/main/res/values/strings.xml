@@ -16,6 +16,7 @@
     <string name="subject_cover_image">Subject Cover</string>
     <string name="class_info_teacher">Teacher</string>
     <string name="class_info_room">Room</string>
+    <string name="class_info_email">Email</string>
     <string-array name="subjects_array">
         <item>Mercury</item>
         <item>Venus</item>
