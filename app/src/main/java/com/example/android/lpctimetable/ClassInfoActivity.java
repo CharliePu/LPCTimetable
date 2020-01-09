@@ -2,6 +2,10 @@ package com.example.android.lpctimetable;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.AppBarLayout;
@@ -18,6 +22,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class ClassInfoActivity extends AppCompatActivity {
     private ImageView mCover;
@@ -38,6 +45,8 @@ public class ClassInfoActivity extends AppCompatActivity {
     private int currentMenu = R.menu.class_info;
     private String emailAddress;
     private char classCode;
+
+    private static final int REQUEST_CODE_UPLOAD_COVER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +72,8 @@ public class ClassInfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         mClassCurrent = (Subject) getIntent().getSerializableExtra(ClassesAdapter.CLASS_CURRENT);
-        classCode = mClassCurrent.mClassCode;
-        emailAddress = mClassCurrent.mEmail;
+        classCode = mClassCurrent.getmClassCode();
+        emailAddress = mClassCurrent.getmEmail();
 
         mEmailFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,11 +85,16 @@ public class ClassInfoActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setTitle(mClassCurrent.mName);
-        mRoom.setText(mClassCurrent.mRoom);
-        mTeacher.setText(mClassCurrent.mTeacher);
+        getSupportActionBar().setTitle(mClassCurrent.getmName());
+        mRoom.setText(mClassCurrent.getmRoom());
+        mTeacher.setText(mClassCurrent.getmTeacher());
 
-        mCover.setImageResource(mClassCurrent.mCoverId);
+        if (mClassCurrent.getmCover(this) != null) {
+            mCover.setColorFilter(R.color.black);
+            mCover.setImageBitmap(mClassCurrent.getmCover(this));
+        } else {
+            mCover.setColorFilter(null);
+        }
     }
 
     @Override
@@ -97,6 +111,11 @@ public class ClassInfoActivity extends AppCompatActivity {
                 return true;
             case R.id.action_edit:
                 openEditingInterface();
+                return true;
+            case R.id.action_change_cover:
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, REQUEST_CODE_UPLOAD_COVER);
                 return true;
             case R.id.action_edit_done:
                 closeEditingInterface(true);
@@ -118,6 +137,31 @@ public class ClassInfoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Code from @Atul Mavani
+        // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                new CoverUtility().saveCover(selectedImage,classCode,this);
+                selectedImage = new CoverUtility().loadCoverFromStorage(classCode,this);
+                mCover.setImageBitmap(selectedImage);
+                mClassCurrent.setmCover(selectedImage, this);
+                mClassCurrent.save(this);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        }else {
+            Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void closeEditingInterface(Boolean willSave)
     {
         hideKeyboard(this);
@@ -129,10 +173,10 @@ public class ClassInfoActivity extends AppCompatActivity {
             mTeacher.setText(mTeacherEdit.getText().toString());
             emailAddress = mEmailEdit.getText().toString();
 
-            mClassCurrent.mRoom = mRoomEdit.getText().toString();
-            mClassCurrent.mTeacher = mTeacherEdit.getText().toString();
-            mClassCurrent.mName = mSubjectEdit.getText().toString();
-            mClassCurrent.mEmail = mEmailEdit.getText().toString();
+            mClassCurrent.setmRoom(mRoomEdit.getText().toString());
+            mClassCurrent.setmTeacher(mTeacherEdit.getText().toString());
+            mClassCurrent.setmName(mSubjectEdit.getText().toString());
+            mClassCurrent.setmEmail(mEmailEdit.getText().toString());
             mClassCurrent.save(this);
         }
 

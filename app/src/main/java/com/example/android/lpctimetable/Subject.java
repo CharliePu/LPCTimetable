@@ -2,22 +2,21 @@ package com.example.android.lpctimetable;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 
 import java.io.Serializable;
 
 public class Subject implements Serializable {
-    public String mName;
-    public String mRoom;
-    public String mTeacher;
-    public String mEmail;
-    public int mCoverId;
-    public char mClassCode;
+    private String mName;
+    private String mRoom;
+    private String mTeacher;
+    private String mEmail;
+    private char mClassCode;
 
-    Subject(String name, String room, String teacher, int coverId, String email, char classCode) {
+    Subject(String name, String room, String teacher, String email, char classCode) {
         mName = name;
         mRoom = room;
         mTeacher = teacher;
-        mCoverId = coverId;
         mEmail = email;
         mClassCode = classCode;
     }
@@ -27,8 +26,7 @@ public class Subject implements Serializable {
         mName = sharedPref.getString("com.example.android.lpctimetable.class_"+classCode+"_name", "Class "+classCode);
         mRoom = sharedPref.getString("com.example.android.lpctimetable.class_"+classCode+"_room", "");
         mTeacher = sharedPref.getString("com.example.android.lpctimetable.class_"+classCode+"_teacher", "");
-        mEmail = sharedPref.getString("com.example.android.lpctimetable.class_"+classCode+"_email", "");
-        mCoverId = sharedPref.getInt("com.example.android.lpctimetable.class_"+classCode+"_cover", R.drawable.ess);
+        mEmail = sharedPref.getString("com.example.android.lpctimetable.class_" + classCode + "_email", "");
         mClassCode = classCode;
     }
 
@@ -39,7 +37,54 @@ public class Subject implements Serializable {
         editor.putString("com.example.android.lpctimetable.class_"+mClassCode+"_room",mRoom);
         editor.putString("com.example.android.lpctimetable.class_"+mClassCode+"_teacher",mTeacher);
         editor.putString("com.example.android.lpctimetable.class_"+mClassCode+"_email",mEmail);
-        editor.putInt("com.example.android.lpctimetable.class_"+mClassCode+"_cover",mCoverId);
         editor.apply();
+    }
+
+    public String getmName() {
+        return mName;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
+    public String getmRoom() {
+        return mRoom;
+    }
+
+    public void setmRoom(String mRoom) {
+        this.mRoom = mRoom;
+    }
+
+    public String getmTeacher() {
+        return mTeacher;
+    }
+
+    public void setmTeacher(String mTeacher) {
+        this.mTeacher = mTeacher;
+    }
+
+    public String getmEmail() {
+        return mEmail;
+    }
+
+    public void setmEmail(String mEmail) {
+        this.mEmail = mEmail;
+    }
+
+    public char getmClassCode() {
+        return mClassCode;
+    }
+
+    public void setmClassCode(char mClassCode) {
+        this.mClassCode = mClassCode;
+    }
+
+    public Bitmap getmCover(Context context){
+        return new CoverUtility().loadCoverFromStorage(mClassCode,context);
+    }
+
+    public void setmCover(Bitmap cover, Context context){
+        new CoverUtility().saveCover(cover,mClassCode,context);
     }
 }

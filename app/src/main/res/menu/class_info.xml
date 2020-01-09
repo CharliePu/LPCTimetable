@@ -6,4 +6,9 @@
         android:id="@+id/action_edit"
         android:title="@string/class_info_edit"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_change_cover"
+        android:title="@string/class_info_change_cover"
+        app:showAsAction="never" />
 </menu>

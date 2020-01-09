@@ -71,6 +71,7 @@ public class CalendarUtility{
             cursor = mContentResolver.query(CalendarContract.Events.CONTENT_URI, EVENT_PROJECTION, selection, selectionArgs, null);
         } catch(SecurityException e){
             e.printStackTrace();
+            Log.e(TAG, "listAllEvents: failed to query calendar");
         }
 
         String event = null;

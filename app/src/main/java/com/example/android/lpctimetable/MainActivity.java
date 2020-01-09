@@ -25,15 +25,15 @@ import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Subject[] mSubjectList = {
-            new Subject("Eng A L&L", "316", "ME",R.drawable.english,"", 'A'),//0
-            new Subject("Math HL", "215", "MZ", R.drawable.maths,"", 'B'),//1
-            new Subject("Physics HL", "205", "MS", R.drawable.physics,"", 'C'),//2
-            new Subject("TOK", "212", "KB", R.drawable.tok,"", 'D'),//3
-            new Subject("Env Sys Soc SL", "207", "JAC", R.drawable.ess,"", 'E'),//4
-            new Subject("Chin Li A SL", "212", "CC", R.drawable.chinese,"", 'F'),//5
-            new Subject("Economics HL", "211", "AO", R.drawable.economics,"", 'G'),//6
-    };
+//    private Subject[] mSubjectList = {
+//            new Subject("Eng A L&L", "316", "ME",R.drawable.english,"", 'A'),//0
+//            new Subject("Math HL", "215", "MZ", R.drawable.maths,"", 'B'),//1
+//            new Subject("Physics HL", "205", "MS", R.drawable.physics,"", 'C'),//2
+//            new Subject("TOK", "212", "KB", R.drawable.tok,"", 'D'),//3
+//            new Subject("Env Sys Soc SL", "207", "JAC", R.drawable.ess,"", 'E'),//4
+//            new Subject("Chin Li A SL", "212", "CC", R.drawable.chinese,"", 'F'),//5
+//            new Subject("Economics HL", "211", "AO", R.drawable.economics,"", 'G'),//6
+//    };
 
     private ArrayList<Subject> mSubjects;
 
@@ -134,8 +134,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void getClassesFromCalendar(){
-        mSubjects = new ArrayList<>(Arrays.asList(mSubjectList));
-
         mIndicator.setVisibility(View.VISIBLE);
         mIndicator.setText(R.string.loading);
 
@@ -144,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         mClassArrayList.clear();
 
         //////DEBUG
-        response.mDay=1;
+        //response.mDay=1;
         /////
         if (response.mDay != null) {
             for (char i : TIME_TABLE[response.mDay]) {
@@ -187,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
         Subject[] subjectArray = mClassArrayList.toArray(new Subject[0]);
 
         for (Subject i : subjectArray){
-            Log.i("Out", i.mName);
+            Log.i("Out", "test:"+i.getmName());
         }
 
-        mAdapter = new ClassesAdapter(subjectArray);
+        mAdapter = new ClassesAdapter(subjectArray, mDayOffset==0);
         mRecyclerView.setAdapter(mAdapter);
     }
 }

@@ -1,12 +1,12 @@
 package com.example.android.lpctimetable;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +28,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
     };
 
     private RecyclerView mParent;
+    private boolean mIsClassesToday;
     public static final String CLASS_CURRENT = "com.example.android.lpctimetable.ClassCurrent";
 
     class myOnClickListener implements View.OnClickListener {
@@ -43,60 +44,34 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
     public static class ClassViewHolder extends RecyclerView.ViewHolder {
         private CardView mContainer;
         private TextView mTitle;
-        private ColorStateList mTitleColor;
         private TextView mTime;
-        private ColorStateList mTimeColor;
         private ImageView mBackground;
+        private Subject mSubject;
 
-        public void highLight() {
+
+        public void highLight(Context context) {
             String subjectName = mTitle.getText().toString();
-            if (subjectName.contains("Eng"))
-            {
-                mBackground.setImageResource(R.drawable.english);
-                mTitle.setTextColor(Color.WHITE);
-                mTime.setTextColor(Color.WHITE);
-            }
-            if (subjectName.contains("Chin"))
-            {
-                mBackground.setImageResource(R.drawable.chinese);
-            }
-            if (subjectName.contains("Math"))
-            {
-                mBackground.setImageResource(R.drawable.maths);
-                mTitle.setTextColor(Color.WHITE);
-                mTime.setTextColor(Color.WHITE);
-            }
-            if (subjectName.contains("Env Sys Soc"))
-            {
-                mBackground.setImageResource(R.drawable.ess);
-                mTitle.setTextColor(Color.WHITE);
-                mTime.setTextColor(Color.WHITE);
-            }
-            if (subjectName.contains("Physics"))
-            {
-                mBackground.setImageResource(R.drawable.physics);
-                mTitle.setTextColor(Color.WHITE);
-                mTime.setTextColor(Color.WHITE);
-            }
-            if (subjectName.contains("Economics"))
-            {
-                mBackground.setImageResource(R.drawable.economics);
-                mTitle.setTextColor(Color.WHITE);
-                mTime.setTextColor(Color.WHITE);
-            }
-            if (subjectName.contains("TOK"))
-            {
-                mBackground.setImageResource(R.drawable.tok);
-            }
+            mTitle.setTextColor(Color.WHITE);
+            mTime.setTextColor(Color.WHITE);
             mContainer.setCardElevation(8);
             mBackground.setVisibility(View.VISIBLE);
+
+            if (mSubject.getmCover(context) != null) {
+                mBackground.setColorFilter(R.color.colorPrimaryDark);
+                mBackground.setImageBitmap(mSubject.getmCover(context));
+            } else {
+                mBackground.clearColorFilter();
+                mBackground.setImageBitmap(null);
+                mBackground.setBackgroundResource(R.color.colorPrimary);
+            }
         }
 
         public void unHighLight() {
             mContainer.setCardElevation(2);
+            mBackground.clearColorFilter();
             mBackground.setVisibility(View.INVISIBLE);
-            mTitle.setTextColor(mTitleColor);
-            mTime.setTextColor(mTimeColor);
+            mTitle.setTextColor(Color.BLACK);
+            mTime.setTextColor(Color.BLACK);
         }
 
         public ClassViewHolder(CardView v) {
@@ -106,13 +81,13 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
             mTime = (TextView) v.findViewById(R.id.tv_class_details);
             mBackground = (ImageView) v.findViewById(R.id.iv_bg);
 
-            mTimeColor = mTime.getTextColors();
-            mTitleColor = mTitle.getTextColors();
+            unHighLight();
         }
     }
 
-    public ClassesAdapter(Subject[] classes) {
+    public ClassesAdapter(Subject[] classes, boolean isClassesToday) {
         mClasses = classes;
+        mIsClassesToday = isClassesToday;
     }
 
     // Create new views (invoked by the layout manager)
@@ -131,8 +106,9 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ClassViewHolder holder, int position) {
-        holder.mTitle.setText(mClasses[position].mName);
+        holder.mTitle.setText(mClasses[position].getmName());
         holder.mTime.setText(TIME_SLOTS[position % 5]);
+        holder.mSubject = mClasses[position];
 
         int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int currentMinute = Calendar.getInstance().get(Calendar.MINUTE);
@@ -148,12 +124,15 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassVie
         if ((currentHour == 11 && currentMinute >= 15) || (currentHour == 12 && currentMinute <= 25)) {
             classOrder = 2;
         }
-        if ((currentHour == 12 && currentMinute >= 35) || (currentHour == 913&& currentMinute <= 45)) {
+        if ((currentHour == 12 && currentMinute >= 35) || (currentHour == 13&& currentMinute <= 45)) {
             classOrder = 3;
         }
+        if ((currentHour == 14 && currentMinute >= 30) || (currentHour == 15&& currentMinute <= 40)) {
+            classOrder = 4;
+        }
 
-        if (position == classOrder)
-            holder.highLight();
+        if (position == classOrder && mIsClassesToday)
+            holder.highLight(mParent.getContext());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
