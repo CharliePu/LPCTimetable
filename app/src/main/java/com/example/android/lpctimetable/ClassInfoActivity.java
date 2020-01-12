@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.AppBarLayout;
@@ -14,6 +15,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -194,8 +197,11 @@ public class ClassInfoActivity extends AppCompatActivity {
 
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(mConstraintLayout);
+        TransitionManager.beginDelayedTransition(mConstraintLayout);
         constraintSet.connect(R.id.tv_teacher_label, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
         constraintSet.applyTo(mConstraintLayout);
+
+
         mSubjectLabel.setVisibility(View.INVISIBLE);
         mSubjectEdit.setVisibility(View.INVISIBLE);
         mRoom.setVisibility(View.VISIBLE);
@@ -214,26 +220,24 @@ public class ClassInfoActivity extends AppCompatActivity {
     {
         mRoomEdit.setText(mRoom.getText());
         mTeacherEdit.setText(mTeacher.getText());
-
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(mConstraintLayout);
-        constraintSet.connect(R.id.tv_teacher_label, ConstraintSet.TOP, R.id.et_subject, ConstraintSet.BOTTOM);
-        constraintSet.applyTo(mConstraintLayout);
-
         mSubjectEdit.setText(mCollapsingToolbarLayout.getTitle());
-        mTeacherEdit.setText(mTeacher.getText());
-        mRoomEdit.setText(mRoom.getText());
         mEmailEdit.setText(emailAddress);
         mCollapsingToolbarLayout.setTitle("Class "+classCode);
 
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(mConstraintLayout);
+        TransitionManager.beginDelayedTransition(mConstraintLayout);
+        constraintSet.connect(R.id.tv_teacher_label, ConstraintSet.TOP, R.id.et_subject, ConstraintSet.BOTTOM);
+        constraintSet.applyTo(mConstraintLayout);
+
+        mRoom.setVisibility(View.INVISIBLE);
+        mRoomEdit.setVisibility(View.VISIBLE);
+        mTeacher.setVisibility(View.INVISIBLE);
+        mTeacherEdit.setVisibility(View.VISIBLE);
         mSubjectEdit.setVisibility(View.VISIBLE);
         mSubjectLabel.setVisibility(View.VISIBLE);
-        mRoom.setVisibility(View.INVISIBLE);
         mEmailLabel.setVisibility(View.VISIBLE);
         mEmailEdit.setVisibility(View.VISIBLE);
-        mTeacher.setVisibility(View.INVISIBLE);
-        mRoomEdit.setVisibility(View.VISIBLE);
-        mTeacherEdit.setVisibility(View.VISIBLE);
 
         mAppBarLayout.setExpanded(false,true);
         currentMenu = R.menu.class_info_edit;
