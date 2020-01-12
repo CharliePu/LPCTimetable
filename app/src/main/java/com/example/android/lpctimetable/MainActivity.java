@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
-        mDayOffset = 0;
         getClassesFromCalendar();
         displayClasses();
 

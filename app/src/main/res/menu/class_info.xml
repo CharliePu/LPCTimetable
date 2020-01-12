@@ -9,6 +9,10 @@
 
     <item
         android:id="@+id/action_change_cover"
-        android:title="@string/class_info_change_cover"
+        android:title="@string/action_change_cover"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_remove_cover"
+        android:title="@string/action_remove_cover"
         app:showAsAction="never" />
 </menu>

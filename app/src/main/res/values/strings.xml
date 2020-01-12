@@ -13,7 +13,6 @@
     <string name="class_info_edit">Edit</string>
     <string name="class_info_done">Done</string>
     <string name="class_info_subject">Subject</string>
-    <string name="class_info_change_cover">Change cover</string>
     <string name="subject_cover_image">Subject Cover</string>
     <string name="class_info_teacher">Teacher</string>
     <string name="class_info_room">Room</string>
@@ -29,5 +28,8 @@
         <item>Neptune</item>
     </string-array>
     <string name="title_activity_class_detail">ClassDetailActivity</string>
+    <string name="action_reset">RESET TIMETABLE</string>
     <string name="action_settings">Settings</string>
+    <string name="action_change_cover">Change cover</string>
+    <string name="action_remove_cover">Remove cover</string>
 </resources>

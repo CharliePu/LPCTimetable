@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,6 +118,11 @@ public class ClassInfoActivity extends AppCompatActivity {
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, REQUEST_CODE_UPLOAD_COVER);
                 return true;
+            case R.id.action_remove_cover:
+                mClassCurrent.setmCover(null, this);
+                mClassCurrent.save(this);
+                mCover.setImageBitmap(null);
+                return true;
             case R.id.action_edit_done:
                 closeEditingInterface(true);
                 return true;
@@ -150,9 +156,15 @@ public class ClassInfoActivity extends AppCompatActivity {
                 Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 new CoverUtility().saveCover(selectedImage,classCode,this);
                 selectedImage = new CoverUtility().loadCoverFromStorage(classCode,this);
-                mCover.setImageBitmap(selectedImage);
+                // Scale the image
+                Log.d("test", "onActivityResult:"+ (int)(mCover.getWidth()/(float)selectedImage.getWidth()*selectedImage.getHeight()));
+                selectedImage = Bitmap.createScaledBitmap(
+                        selectedImage,mCover.getWidth(),
+                        (int)(mCover.getWidth()/(float)selectedImage.getWidth()*selectedImage.getHeight()),
+                        false);
                 mClassCurrent.setmCover(selectedImage, this);
                 mClassCurrent.save(this);
+                mCover.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
