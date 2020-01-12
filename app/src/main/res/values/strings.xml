@@ -3,6 +3,7 @@
     <string name="setting">Setting</string>
     <string name="next_day">Next Day</string>
     <string name="previous_day">Previous Day</string>
+    <string name="today">Today</string>
     <string name="loading">Loading</string>
     <string name="class_a">Class A</string>
     <string name="class_b">Class B</string>

@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private TextView mIndicator;
+    private MenuItem mActionToday;
 
     private ArrayList<Subject> mClassArrayList;
     private int mDayOffset;
@@ -93,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        mActionToday = menu.findItem(R.id.action_today);
+
+        if (mDayOffset == 0){
+            mActionToday.setVisible(false);
+        }else {
+            mActionToday.setVisible(true);
+        }
         return true;
     }
 
@@ -114,6 +123,13 @@ public class MainActivity extends AppCompatActivity {
                 mDayOffset++;
                 getClassesFromCalendar();
                 displayClasses();
+                return true;
+
+            case R.id.action_today:
+                mDayOffset = 0;
+                getClassesFromCalendar();
+                displayClasses();
+                mActionToday.setVisible(false);
                 return true;
 
             default:
@@ -156,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void displayClasses(){
+
+        invalidateOptionsMenu();
+
         switch (mDayOffset){
             case 0:
                 getSupportActionBar().setTitle("Today");

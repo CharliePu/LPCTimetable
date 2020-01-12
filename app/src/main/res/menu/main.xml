@@ -14,6 +14,10 @@
 
 
     <!-- Settings, should always be in the overflow -->
+    <item
+        android:id="@+id/action_today"
+        android:title="@string/today"
+        app:showAsAction="never" />
     <item android:id="@+id/action_settings"
         android:title="@string/setting"
         app:showAsAction="never"/>
